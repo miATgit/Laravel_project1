@@ -13,17 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\MainController::class,'index'])->name('home');
+Route::get('/', [\App\Http\Controllers\MainController::class,'index'])->name('index');
 Route::get('/about', [\App\Http\Controllers\MainController::class,'about'])->name('about');
 Route::get('/contacts', [\App\Http\Controllers\MainController::class,'contacts'])->name('contacts');
 Route::get('/adminPanel', [\App\Http\Controllers\MainController::class,'adminPanel'])->name('admin.index');
 
 Route::get('/news', [\App\Http\Controllers\NewsController::class,'index'])->name('news');
 Route::get('/newsOne/{id?}', [\App\Http\Controllers\NewsController::class,'news_single'])-> where('id', '\d+')->name('newsOne.id');
-Route::get('/newsOne/{category?}', [\App\Http\Controllers\NewsController::class,'news_category'])-> where('id', '\d+')->name('newsOne.category');
+Route::get('/news/categories', [\App\Http\Controllers\CategoryController::class,'index'])->name('category.index');
+Route::get('/news/category/{slug}', [\App\Http\Controllers\CategoryController::class,'show'])->name('category.show');
 
 Route::get('/admin/news/create', [\App\Http\Controllers\NewsController::class,'create'])->name('news.create');
 Route::get('/admin/news/{id}/edit', [\App\Http\Controllers\NewsController::class,'edit'])-> where('id', '\d+')->name('news.edit');
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

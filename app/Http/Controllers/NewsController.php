@@ -11,17 +11,18 @@ class NewsController extends Controller
 
     public function index()
     {
-        return view('news')->with('news', News::getNews());
+        return view('news.news')->with('news', News::getNews());
     }
 
     public function news_single($id)
     {
-        return view('newsOne')->with('news', News::getNewsId($id));
+        return view('news.newsOne')
+            ->with('news', News::getNewsId($id));
     }
 
     public function news_category($category_id)
     {
-        return view('newsOne')->with('news', News::getNewsCategory($category_id));
+        return view('news.newsOne')->with('news', News::getNewsCategory($category_id));
     }
 
 }

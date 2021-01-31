@@ -10,28 +10,28 @@ class News
 
     private static $news = [
 
-        [
+        1 => [
             'id' => 1,
             'category_id' => 1,
             'category_name' => 'спорт',
             'title' => 'Новость 1',
             'text' => 'Текст новости 1111'
         ],
-        [
+        2 => [
             'id' => 2,
             'category_id' => 2,
             'category_name' => 'политика',
             'title' => 'Новость 2',
             'text' => 'Текст новости 22'
         ],
-        [
+        3 => [
             'id' => 3,
             'category_id' => 2,
             'category_name' => 'политика',
             'title' => 'Новость 3',
             'text' => 'Текст новости 333'
         ],
-        [
+        4 => [
             'id' => 4,
             'category_id' => 1,
             'category_name' => 'спорт',
@@ -45,12 +45,10 @@ class News
     }
 
     public static function getNewsId($id) {
-        foreach (static::$news as $news){
-            if ($news['id'] == $id) {
-                return $news;
-            }
+        if (array_key_exists($id, static::$news)) {
+            return static::$news[$id];
         }
-        return [];
+        else return [];
     }
 
     public static function getNewsCategory($category_id) {
@@ -61,4 +59,16 @@ class News
         }
         return [];
     }
+
+    public static function getNewsByCategorySlug($slug) {
+        $id = Category::getCategoryIdBySlug($slug);
+        $news = [];
+        foreach (static::$news as $item) {
+            if ($item['category_id'] == $id) {
+                $news[] = $item;
+            }
+        }
+        return $news;
+    }
+
 }
