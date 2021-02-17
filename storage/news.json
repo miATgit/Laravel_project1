@@ -1,0 +1,75 @@
+{
+    "1": {
+        "id": 1,
+        "category_id": 1,
+        "category_name": "спорт",
+        "title": "Новость 1",
+        "text": "Текст новости 1111",
+        "image": null
+    },
+    "2": {
+        "id": 2,
+        "category_id": 2,
+        "category_name": "политика",
+        "title": "Новость 2",
+        "text": "Текст новости 22",
+        "image": null
+    },
+    "3": {
+        "id": 3,
+        "category_id": 2,
+        "category_name": "политика",
+        "title": "Новость 3",
+        "text": "Текст новости 333",
+        "image": null
+    },
+    "4": {
+        "id": 4,
+        "category_id": 1,
+        "category_name": "спорт",
+        "title": "Новость 4",
+        "text": "Текст новости 4444",
+        "image": null
+    },
+    "5": {
+        "id": 5,
+        "category_id": 3,
+        "category_name": "здоровье",
+        "title": "Новость 5",
+        "text": "Текст новости про здоровье",
+        "image": null
+    },
+    "6": {
+        "title": "вость2",
+        "category_id": "4",
+        "text": "разд наука",
+        "id": 6,
+        "category_name": "Наука",
+        "image": null
+    },
+
+    "8": {
+        "title": "pic2",
+        "category_id": "1",
+        "text": "pic wh",
+        "image": "\/storage\/CHwrQ9Qm61KgcQplrn1bwEcfBdMVdzvO0o1sZEg8.jpg",
+        "id": 8,
+        "category_name": "Спорт"
+    },
+    "9": {
+        "title": "pic торадо1",
+        "category_id": "1",
+        "text": "картинка торнадо 1",
+        "image": "\/storage\/OACiGmFFPos0yV0pPWeyLGkAjsyiS5ZrjD6GPToX.jpg",
+        "id": 9,
+        "category_name": "Спорт"
+    },
+    "10": {
+        "title": "10 tornado 2",
+        "category_id": "1",
+        "text": "tornado 2",
+        "image": "\/storage\/nEQC4jKPRdIYlnJD1T34nnVJreTiEulWhqJgs1of.jpg",
+        "id": 10,
+        "category_name": "Спорт"
+    }
+}

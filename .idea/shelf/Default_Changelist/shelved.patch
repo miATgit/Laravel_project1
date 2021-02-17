@@ -1,0 +1,576 @@
+Index: app/Models/Category.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nnamespace App\\Models;\r\n\r\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\r\nuse Illuminate\\Database\\Eloquent\\Model;\r\n\r\nclass Category\r\n\r\n{\r\n    private static $categories = [\r\n        1 => [\r\n            'id' => 1,\r\n            'title' => 'Спорт',\r\n            'slug' => 'sport'\r\n        ],\r\n        2 => [\r\n            'id' => 2,\r\n            'title' => 'Политика',\r\n            'slug' => 'politics'\r\n        ]\r\n    ];\r\n\r\n    public static function getCategories() {\r\n        return static::$categories;\r\n}\r\n\r\n    public static function getCategoryById() {\r\n        if (array_key_exists($id, static::$categories)) {\r\n            return static::$categories[$id];\r\n        }\r\n        else return [];\r\n    }\r\n\r\n    public static function getCategoryIdBySlug($slug) {\r\n        $id = null;\r\n        $name = null;\r\n        foreach (static::$categories as $category) {\r\n            if($category['slug'] == $slug) {\r\n            $id = $category['id'];\r\n            $name = $category['title'];\r\n            break;\r\n            }\r\n        }\r\n        return $id;\r\n        return $name;\r\n    }\r\n\r\n    public static function getCategoryNameBySlug($slug) {\r\n        $id = Category::getCategoryIdBySlug($slug);\r\n        $category = Category::getCategoryById($id);\r\n        if ($category !=[]) {\r\n            return $category['title'];\r\n        }\r\n        else return [];\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Category.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ app/Models/Category.php	(date 1612965430618)
+@@ -8,26 +8,15 @@
+ class Category
+ 
+ {
+-    private static $categories = [
+-        1 => [
+-            'id' => 1,
+-            'title' => 'Спорт',
+-            'slug' => 'sport'
+-        ],
+-        2 => [
+-            'id' => 2,
+-            'title' => 'Политика',
+-            'slug' => 'politics'
+-        ]
+-    ];
++
+ 
+     public static function getCategories() {
+-        return static::$categories;
++        return json_decode(\File::get(storage_path() . '\category.json'), true);
+ }
+ 
+     public static function getCategoryById() {
+-        if (array_key_exists($id, static::$categories)) {
+-            return static::$categories[$id];
++        if (array_key_exists($id, static::getCategories())) {
++            return static::getCategories()[$id];
+         }
+         else return [];
+     }
+@@ -35,7 +24,7 @@
+     public static function getCategoryIdBySlug($slug) {
+         $id = null;
+         $name = null;
+-        foreach (static::$categories as $category) {
++        foreach (static::getCategories() as $category) {
+             if($category['slug'] == $slug) {
+             $id = $category['id'];
+             $name = $category['title'];
+Index: app/Models/News.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nnamespace App\\Models;\r\n\r\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\r\nuse Illuminate\\Database\\Eloquent\\Model;\r\n\r\nclass News\r\n{\r\n\r\n    private static $news = [\r\n\r\n        1 => [\r\n            'id' => 1,\r\n            'category_id' => 1,\r\n            'category_name' => 'спорт',\r\n            'title' => 'Новость 1',\r\n            'text' => 'Текст новости 1111'\r\n        ],\r\n        2 => [\r\n            'id' => 2,\r\n            'category_id' => 2,\r\n            'category_name' => 'политика',\r\n            'title' => 'Новость 2',\r\n            'text' => 'Текст новости 22'\r\n        ],\r\n        3 => [\r\n            'id' => 3,\r\n            'category_id' => 2,\r\n            'category_name' => 'политика',\r\n            'title' => 'Новость 3',\r\n            'text' => 'Текст новости 333'\r\n        ],\r\n        4 => [\r\n            'id' => 4,\r\n            'category_id' => 1,\r\n            'category_name' => 'спорт',\r\n            'title' => 'Новость 4',\r\n            'text' => 'Текст новости 4444'\r\n        ]\r\n    ];\r\n\r\n    public static function getNews() {\r\n        return static::$news;\r\n    }\r\n\r\n    public static function getNewsId($id) {\r\n        if (array_key_exists($id, static::$news)) {\r\n            return static::$news[$id];\r\n        }\r\n        else return [];\r\n    }\r\n\r\n    public static function getNewsCategory($category_id) {\r\n        foreach (static::$news as $news){\r\n            if ($news['category_id'] == $category_id) {\r\n                return $news;\r\n            }\r\n        }\r\n        return [];\r\n    }\r\n\r\n    public static function getNewsByCategorySlug($slug) {\r\n        $id = Category::getCategoryIdBySlug($slug);\r\n        $news = [];\r\n        foreach (static::$news as $item) {\r\n            if ($item['category_id'] == $id) {\r\n                $news[] = $item;\r\n            }\r\n        }\r\n        return $news;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/News.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ app/Models/News.php	(date 1612965472885)
+@@ -8,7 +8,7 @@
+ class News
+ {
+ 
+-    private static $news = [
++    public static $news = [
+ 
+         1 => [
+             'id' => 1,
+@@ -37,22 +37,29 @@
+             'category_name' => 'спорт',
+             'title' => 'Новость 4',
+             'text' => 'Текст новости 4444'
++        ],
++        5 => [
++            'id' => 5,
++            'category_id' => 3,
++            'category_name' => 'здоровье',
++            'title' => 'Новость 5',
++            'text' => 'Текст новости про здоровье'
+         ]
+     ];
+ 
+     public static function getNews() {
+-        return static::$news;
++        return json_decode(\File::get(storage_path() . '\news.json'), true);
+     }
+ 
+     public static function getNewsId($id) {
+-        if (array_key_exists($id, static::$news)) {
+-            return static::$news[$id];
++        if (array_key_exists($id, static::getNews())) {
++            return static::getNews()[$id];
+         }
+         else return [];
+     }
+ 
+     public static function getNewsCategory($category_id) {
+-        foreach (static::$news as $news){
++        foreach (static::getNews() as $news){
+             if ($news['category_id'] == $category_id) {
+                 return $news;
+             }
+@@ -63,7 +70,7 @@
+     public static function getNewsByCategorySlug($slug) {
+         $id = Category::getCategoryIdBySlug($slug);
+         $news = [];
+-        foreach (static::$news as $item) {
++        foreach (static::getNews() as $item) {
+             if ($item['category_id'] == $id) {
+                 $news[] = $item;
+             }
+Index: app/Http/Controllers/NewsController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nnamespace App\\Http\\Controllers;\r\n\r\nuse Illuminate\\Http\\Request;\r\nuse App\\Models\\News;\r\n\r\nclass NewsController extends Controller\r\n{\r\n\r\n\r\n    public function index()\r\n    {\r\n        return view('news.news')->with('news', News::getNews());\r\n    }\r\n\r\n    public function news_single($id)\r\n    {\r\n        return view('news.newsOne')\r\n            ->with('news', News::getNewsId($id));\r\n    }\r\n\r\n    public function news_category($category_id)\r\n    {\r\n        return view('news.newsOne')->with('news', News::getNewsCategory($category_id));\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/NewsController.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ app/Http/Controllers/NewsController.php	(date 1613111256257)
+@@ -2,8 +2,10 @@
+ 
+ namespace App\Http\Controllers;
+ 
++use App\Models\Category;
+ use Illuminate\Http\Request;
+ use App\Models\News;
++use Illuminate\Support\Facades\Storage;
+ 
+ class NewsController extends Controller
+ {
+@@ -25,4 +27,47 @@
+         return view('news.newsOne')->with('news', News::getNewsCategory($category_id));
+     }
+ 
++    public function news_create(Request $request)
++    {
++        if ($request->isMethod('post')){
++            $url = null;
++            if ($request->file('image')) {
++                $path = \Storage::putFile('public', $request->file('image'));
++                $url = Storage::url($path);
++            }
++            $data = News::getNews();
++            $addData = $request->except('_token');
++
++            $categories_data = json_decode(\File::get(storage_path() . '\category.json'), true);
++            foreach ($categories_data as $category) {
++                if ($category['id'] == $addData['category_id']) {
++                    $category_name = $category['title'];
++                    break;
++                }
++            }
++
++            $data[] = $addData;
++            $id = array_key_last($data);
++            $data[$id]['id'] = $id;
++            $data[$id]['category_name'] = $category_name;
++            $data[$id]['image'] = $url;
++
++
++            \File::put(storage_path().'\news.json', json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
++
++            return redirect()->route('newsOne.id', $id);
++        }
++        return view('news.create', [
++            'categories' => Category::getCategories()
++        ]);
++    }
++
++    public function news_download() {
++
++        return response()->json(News::getNews())
++            ->header('Content-disposition', 'attachment; filename="json.txt"')
++            ->setEncodingOptions(JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
++        //return response()->download('img/paris1.jpg');
++    }
++
+ }
+Index: resources/views/news/create.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/create.blade.php	(date 1613107127572)
++++ resources/views/news/create.blade.php	(date 1613107127572)
+@@ -0,0 +1,42 @@
++@extends('layouts.app')
++@section('title')Создать новость@endsection
++@section('content')
++    <div class="container mt-5 mb-5">
++        <div class="row justify-content-center ">
++            <div class="col-md-8">
++                <div class="card">
++                    <div class="card-body">
++                        <h1>Создать новость</h1>
++                        <form id="createNews-form" action="{{ route('news.create') }}" method="POST" enctype="multipart/form-data">
++                            @csrf
++                        <div class="form-group mb-2">
++                            <label for="newsTitle">News Title</label>
++                            <input type="text" name="title" value="{{ old('title') }}">
++                        </div>
++                        <div class="form-group mb-2">
++                            <select class="form-control" name="category_id" id="newsCategory">
++                                @forelse ($categories as $item)
++                                <option @if ($item['id'] == old('category_id ')) selected @endif value="{{$item['id']}}">{{$item['title']}}</option>
++                                @empty
++                                    <option value="0">Нет категории</option>
++                                @endforelse
++                            </select>
++                        </div>
++
++                        <div class="form-group mb-2">
++                            <label for="newsText">News Text</label>
++                            <textarea class="form-control" name="text" id="newsText">{{ old('text') }}</textarea>
++                        </div>
++                            <div class="form-group mb-2">
++                                <input type="file" name="image">
++                            </div>
++                        <button type="submit" class="btn btn-primary">Submit</button>
++
++                        </form>
++                    </div>
++                </div>
++            </div>
++        </div>
++    </div>
++@endsection
++
+Index: resources/views/includes/menu.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><li class=\"nav-item\">\r\n    <a class=\"nav-link {{request()->routeIs('index')?'active':''}}\"\r\n       aria-current=\"page\" href=\"{{@route('index')}}\">Главная</a>\r\n</li>\r\n<li class=\"nav-item\"><a class=\"nav-link {{request()->routeIs('about')?'active':''}}\"\r\n                        href=\"{{route('about')}}\">О нас</a></li>\r\n<li class=\"nav-item dropdown show\">\r\n\r\n    <a class=\"nav-link dropdown-toggle\" id=\"dropdown01\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">Новости</a>\r\n    <div class=\"dropdown-menu\" aria-labelledby=\"dropdown01\">\r\n        <a class=\"dropdown-item {{request()->routeIs('news')?'active':''}}\"\r\n           href=\"{{@route('news')}}\">Новости</a>\r\n        <a class=\"dropdown-item\" href=\"{{@route('category.index')}}\">Категории</a>\r\n    </div>\r\n</li>\r\n<li class=\"nav-item\"> <a class=\"nav-link {{request()->routeIs('contacts')?'active':''}}\"\r\n                         href=\"{{route('contacts')}}\" >Контакты</a></li>\r\n<li class=\"nav-item\">\r\n    <a class=\"nav-link {{request()->routeIs('admin.index')?'active':''}}\"\r\n       href=\"{{@route('admin.index')}}\" >Админка</a>\r\n</li>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/includes/menu.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/includes/menu.blade.php	(date 1612126980470)
+@@ -1,6 +1,6 @@
+ <li class="nav-item">
+     <a class="nav-link {{request()->routeIs('index')?'active':''}}"
+-       aria-current="page" href="{{@route('index')}}">Главная</a>
++       aria-current="page" href="{{route('index')}}">Главная</a>
+ </li>
+ <li class="nav-item"><a class="nav-link {{request()->routeIs('about')?'active':''}}"
+                         href="{{route('about')}}">О нас</a></li>
+@@ -10,7 +10,7 @@
+     <div class="dropdown-menu" aria-labelledby="dropdown01">
+         <a class="dropdown-item {{request()->routeIs('news')?'active':''}}"
+            href="{{@route('news')}}">Новости</a>
+-        <a class="dropdown-item" href="{{@route('category.index')}}">Категории</a>
++        <a class="dropdown-item" href="{{@route('category.index')}}" >Категории</a>
+     </div>
+ </li>
+ <li class="nav-item"> <a class="nav-link {{request()->routeIs('contacts')?'active':''}}"
+Index: storage/category.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- storage/category.json	(date 1612965579426)
++++ storage/category.json	(date 1612965579426)
+@@ -0,0 +1,22 @@
++{
++    "1": {
++        "id": 1,
++        "title": "Спорт",
++        "slug": "sport"
++    },
++    "2": {
++        "id": 2,
++        "title": "Политика",
++        "slug": "politics"
++    },
++    "3": {
++        "id": 3,
++        "title": "Здоровье",
++        "slug": "health"
++    },
++    "4": {
++        "id": 4,
++        "title": "Наука",
++        "slug": "science"
++    }
++}
+Index: resources/views/contacts.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('title')Контакты@endsection\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    <h1>Контакты</h1>\r\n                    <p>Тел: 00-00-000</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/contacts.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/contacts.blade.php	(date 1612108104584)
+@@ -5,8 +5,10 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    <h1>Контакты</h1>
+-                    <p>Тел: 00-00-000</p>
++                    <div class="card-body">
++                        <h1>Контакты</h1>
++                        <p>Тел: 00-00-000</p>
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/about.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('title')О нас@endsection\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    <h1>О нас</h1>\r\n                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/about.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/about.blade.php	(date 1612108128776)
+@@ -5,8 +5,10 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    <h1>О нас</h1>
+-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>
++                    <div class="card-body">
++                        <h1>О нас</h1>
++                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/index.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('title')Главная@endsection\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    <h1>Главная страница</h1>\r\n                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/index.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/index.blade.php	(date 1612108064444)
+@@ -5,8 +5,10 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    <h1>Главная страница</h1>
+-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>
++                    <div class="card-body">
++                        <h1>Главная страница</h1>
++                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ducimus ea harum porro repellat rerum voluptatem! Delectus deserunt doloremque et hic rerum sequi totam? Alias aliquid consequatur esse ipsam magni, nihil nisi possimus quae quam quidem sapiente sint veniam voluptatibus.</p>
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: routes/web.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nuse Illuminate\\Support\\Facades\\Route;\r\n\r\n/*\r\n|--------------------------------------------------------------------------\r\n| Web Routes\r\n|--------------------------------------------------------------------------\r\n|\r\n| Here is where you can register web routes for your application. These\r\n| routes are loaded by the RouteServiceProvider within a group which\r\n| contains the \"web\" middleware group. Now create something great!\r\n|\r\n*/\r\n\r\nRoute::get('/', [\\App\\Http\\Controllers\\MainController::class,'index'])->name('index');\r\nRoute::get('/about', [\\App\\Http\\Controllers\\MainController::class,'about'])->name('about');\r\nRoute::get('/contacts', [\\App\\Http\\Controllers\\MainController::class,'contacts'])->name('contacts');\r\nRoute::get('/adminPanel', [\\App\\Http\\Controllers\\MainController::class,'adminPanel'])->name('admin.index');\r\n\r\nRoute::get('/news', [\\App\\Http\\Controllers\\NewsController::class,'index'])->name('news');\r\nRoute::get('/newsOne/{id?}', [\\App\\Http\\Controllers\\NewsController::class,'news_single'])-> where('id', '\\d+')->name('newsOne.id');\r\nRoute::get('/news/categories', [\\App\\Http\\Controllers\\CategoryController::class,'index'])->name('category.index');\r\nRoute::get('/news/category/{slug}', [\\App\\Http\\Controllers\\CategoryController::class,'show'])->name('category.show');\r\n\r\nRoute::get('/admin/news/create', [\\App\\Http\\Controllers\\NewsController::class,'create'])->name('news.create');\r\nRoute::get('/admin/news/{id}/edit', [\\App\\Http\\Controllers\\NewsController::class,'edit'])-> where('id', '\\d+')->name('news.edit');\r\n\r\n\r\n\r\n\r\nAuth::routes();\r\n\r\nRoute::get('/home', [App\\Http\\Controllers\\HomeController::class, 'index'])->name('home');\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- routes/web.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ routes/web.php	(date 1612967890481)
+@@ -19,12 +19,15 @@
+ Route::get('/adminPanel', [\App\Http\Controllers\MainController::class,'adminPanel'])->name('admin.index');
+ 
+ Route::get('/news', [\App\Http\Controllers\NewsController::class,'index'])->name('news');
+-Route::get('/newsOne/{id?}', [\App\Http\Controllers\NewsController::class,'news_single'])-> where('id', '\d+')->name('newsOne.id');
++Route::get('/newsOne/{id?}', [\App\Http\Controllers\NewsController::class,'news_single'])->name('newsOne.id');
+ Route::get('/news/categories', [\App\Http\Controllers\CategoryController::class,'index'])->name('category.index');
+ Route::get('/news/category/{slug}', [\App\Http\Controllers\CategoryController::class,'show'])->name('category.show');
+ 
+-Route::get('/admin/news/create', [\App\Http\Controllers\NewsController::class,'create'])->name('news.create');
+-Route::get('/admin/news/{id}/edit', [\App\Http\Controllers\NewsController::class,'edit'])-> where('id', '\d+')->name('news.edit');
++Route::match(['get', 'post'],'/news/create', [\App\Http\Controllers\NewsController::class,'news_create'])->name('news.create');
++Route::get('/news/download', [\App\Http\Controllers\NewsController::class,'news_download'])->name('news.download');
++//Route::get('/admin/news/{id}/edit', [\App\Http\Controllers\NewsController::class,'edit'])-> where('id', '\d+')->name('news.edit');
++
++
+ 
+ 
+ 
+Index: resources/views/adminPanel.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('title')Администрирование новостей@endsection\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    <ul class=\"me-auto mb-2 mb-md-0\">\r\n                        <h2>Создание и редактирование новостей</h2>\r\n                        <li class=\"nav-item\">\r\n                            <a class=\"nav-link\" href=\"/news/edit\">Редактировать новость</a>\r\n                        </li>\r\n                        <li class=\"nav-item\">\r\n                            <a class=\"nav-link\" href=\"/news/create\">Создать новость</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/adminPanel.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/adminPanel.blade.php	(date 1612675943568)
+@@ -8,10 +8,13 @@
+                     <ul class="me-auto mb-2 mb-md-0">
+                         <h2>Создание и редактирование новостей</h2>
+                         <li class="nav-item">
+-                            <a class="nav-link" href="/news/edit">Редактировать новость</a>
++                            <a class="nav-link" href="{{--route('news.edit')}}--}}#">Редактировать новость</a>
++                        </li>
++                        <li class="nav-item">
++                            <a class="nav-link" href="{{route('news.create')}}">Создать новость</a>
+                         </li>
+                         <li class="nav-item">
+-                            <a class="nav-link" href="/news/create">Создать новость</a>
++                            <a class="nav-link" href="{{route('news.download')}}">download</a>
+                         </li>
+                     </ul>
+                 </div>
+Index: resources/views/news/news.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('title')Новости@endsection\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    <h1>Новости</h1>\r\n\r\n                    @foreach($news as $item)\r\n                        <a href=\"{{route('newsOne.id', $item['id'])}}\">{{$item['title']}}</a>\r\n                        <a href=\"{{route('category.index', $item['category_id'])}}\">(категория: .{{$item['category_name']}}.)</a><br>\r\n                    @endforeach\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/news.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/news/news.blade.php	(date 1613163540708)
+@@ -5,12 +5,19 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    <h1>Новости</h1>
++                    <div class="card-body">
++                        <h1>Новости</h1>
+ 
+-                    @foreach($news as $item)
+-                        <a href="{{route('newsOne.id', $item['id'])}}">{{$item['title']}}</a>
+-                        <a href="{{route('category.index', $item['category_id'])}}">(категория: .{{$item['category_name']}}.)</a><br>
+-                    @endforeach
++                        @foreach($news as $item)
++                            @if (isset ($item['image']) and ($item['image'])<> null)
++                                <img src="{{asset($item['image'])}}">
++                            @else
++                                <img src="{{asset('/storage/paris1.jpg')}}"></p>
++                            @endif
++                            <a href="{{route('newsOne.id', $item['id'])}}">{{$item['title']}}</a>
++                            <a href="{{route('category.index', $item['category_id'])}}">(категория: .{{$item['category_name']}}.)</a><br>
++                        @endforeach
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/news/newsOne.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    @if (isset ($news['title']))\r\n                        <h2>{{ $news['title'] }}</h2><br>\r\n                        @else\r\n                            <h2>Нет такой новости</h2>\r\n                        @endif\r\n                    @if (isset ($news['text']))\r\n                        <p>{{ $news['text'] }}</p>\r\n                    @else\r\n                        <p>Попробуйте как-то по-другому поискать</p>\r\n                    @endif\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/newsOne.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/news/newsOne.blade.php	(date 1613161407667)
+@@ -4,16 +4,25 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    @if (isset ($news['title']))
+-                        <h2>{{ $news['title'] }}</h2><br>
+-                        @else
+-                            <h2>Нет такой новости</h2>
+-                        @endif
+-                    @if (isset ($news['text']))
+-                        <p>{{ $news['text'] }}</p>
+-                    @else
+-                        <p>Попробуйте как-то по-другому поискать</p>
+-                    @endif
++                    <div class="card-body">
++                        @if (isset ($news['image']) and ($news['image'])<> null)
++                            <img src="{{asset($news['image'])}}">
++                        @else
++                            <img src="{{asset('/storage/paris1.jpg')}}"></p>
++                        @endif
++
++                        @if (isset ($news['title']))
++                            <h2>{{ $news['title'] }}</h2><br>
++                            @else
++                                <h2>Нет такой новости</h2>
++                            @endif
++                        @if (isset ($news['text']))
++                            <p>{{ $news['text'] }}</p>
++                        @else
++                            <p>Попробуйте как-то по-другому поискать</p>
++                        @endif
++
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/news/categories.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    @forelse ($categories as $category)\r\n                        <a href=\"{{@route('category.show', $category['slug'])}}\">\r\n                        <h2>{{ $category['title'] }}</h2></a><br>\r\n                    @empty\r\n                        <h2>Нет такой новости</h2>\r\n                    @endforelse\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/categories.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/news/categories.blade.php	(date 1612921628402)
+@@ -4,12 +4,14 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    @forelse ($categories as $category)
+-                        <a href="{{@route('category.show', $category['slug'])}}">
+-                        <h2>{{ $category['title'] }}</h2></a><br>
+-                    @empty
+-                        <h2>Нет такой новости</h2>
+-                    @endforelse
++                    <div class="card-body">
++                        @forelse ($categories as $category)
++                            <a href="{{@route('category.show', $category['slug'])}}">
++                            <h2>{{ $category['title'] }}</h2></a><br>
++                        @empty
++                            <h2>Нет такой новости</h2>
++                        @endforelse
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/news/category.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@extends('layouts.app')\r\n@section('content')\r\n    <div class=\"container mt-5 mb-5\">\r\n        <div class=\"row justify-content-center \">\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card\">\r\n                    @if ($news)\r\n                        @forelse($news as $item)\r\n                            <h2>{{ $item['title'] }}</h2><br>\r\n                            <p>{{ $item['text'] }}</p><br>\r\n                            <a href=\"{{@route('category.show', $item['id'])}}\"></a>\r\n                        @empty\r\n                            нет такой новости\r\n                        @endforelse\r\n                    @else\r\n                        <h2>Нет такой новости</h2>\r\n                    @endif\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n@endsection\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/category.blade.php	(revision f829fedf4abc493879726af969b64498aa49888a)
++++ resources/views/news/category.blade.php	(date 1612128742318)
+@@ -4,17 +4,19 @@
+         <div class="row justify-content-center ">
+             <div class="col-md-8">
+                 <div class="card">
+-                    @if ($news)
+-                        @forelse($news as $item)
+-                            <h2>{{ $item['title'] }}</h2><br>
+-                            <p>{{ $item['text'] }}</p><br>
+-                            <a href="{{@route('category.show', $item['id'])}}"></a>
+-                        @empty
+-                            нет такой новости
+-                        @endforelse
+-                    @else
+-                        <h2>Нет такой новости</h2>
+-                    @endif
++                    <div class="card-body">
++                        @if ($news)
++                            @forelse($news as $item)
++                                <h2>{{ $item['title'] }}</h2><br>
++                                <p>{{ $item['text'] }}</p><br>
++                                <a href="{{@route('category.show', $item['id'])}}"></a>
++                            @empty
++                                нет такой новости
++                            @endforelse
++                        @else
++                            <h2>Нет такой новости</h2>
++                        @endif
++                    </div>
+                 </div>
+             </div>
+         </div>
+Index: resources/views/news/edit.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- resources/views/news/edit.blade.php	(date 1612128843097)
++++ resources/views/news/edit.blade.php	(date 1612128843097)
+@@ -0,0 +1,16 @@
++@extends('layouts.app')
++@section('title')Создать новость@endsection
++@section('content')
++    <div class="container mt-5 mb-5">
++        <div class="row justify-content-center ">
++            <div class="col-md-8">
++                <div class="card">
++                    <div class="card-body">
++                        <h1>Редактировать новость</h1>
++                    </div>
++                </div>
++            </div>
++        </div>
++    </div>
++@endsection
++
