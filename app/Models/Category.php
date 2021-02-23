@@ -22,7 +22,7 @@ class Category
     ];
 
     public static function getCategories() {
-        return static::$categories;
+        return json_decode(\File::get(storage_path().'/category.json'), true);
 }
 
     public static function getCategoryById() {

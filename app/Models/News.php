@@ -41,7 +41,7 @@ class News
     ];
 
     public static function getNews() {
-        return static::$news;
+        return json_decode(\File::get(storage_path().'/news.json'), true);
     }
 
     public static function getNewsId($id) {
