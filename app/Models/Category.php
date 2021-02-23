@@ -26,8 +26,8 @@ class Category
 }
 
     public static function getCategoryById() {
-        if (array_key_exists($id, static::$categories)) {
-            return static::$categories[$id];
+        if (array_key_exists($id, static::getCategories())) {
+            return static::getCategories()[$id];
         }
         else return [];
     }
@@ -35,7 +35,7 @@ class Category
     public static function getCategoryIdBySlug($slug) {
         $id = null;
         $name = null;
-        foreach (static::$categories as $category) {
+        foreach (static::getCategories() as $category) {
             if($category['slug'] == $slug) {
             $id = $category['id'];
             $name = $category['title'];
