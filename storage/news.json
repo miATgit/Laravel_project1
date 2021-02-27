@@ -5,7 +5,7 @@
         "category_name": "спорт",
         "title": "Новость 1",
         "text": "Текст новости 1111",
-        "image": null
+        "image": "\/storage\/default.jpg"
     },
     "2": {
         "id": 2,
@@ -13,7 +13,7 @@
         "category_name": "политика",
         "title": "Новость 2",
         "text": "Текст новости 22",
-        "image": null
+        "image": "\/storage\/default.jpg"
     },
     "3": {
         "id": 3,
@@ -21,7 +21,7 @@
         "category_name": "политика",
         "title": "Новость 3",
         "text": "Текст новости 333",
-        "image": null
+        "image": "\/storage\/default.jpg"
     },
     "4": {
         "id": 4,
@@ -29,7 +29,7 @@
         "category_name": "спорт",
         "title": "Новость 4",
         "text": "Текст новости 4444",
-        "image": null
+        "image": "\/storage\/default.jpg"
     },
     "5": {
         "title": "pic2",
@@ -54,5 +54,29 @@
         "image": "\/storage\/nEQC4jKPRdIYlnJD1T34nnVJreTiEulWhqJgs1of.jpg",
         "id": 7,
         "category_name": "Здоровье"
+    },
+    "8": {
+        "title": "pic2",
+        "text": "kjh",
+        "category_id": "1",
+        "image": "\/storage\/rozFF7XCNN6niEVo6mqnDJ9zfwa8cfwKxl7jed6K.jpg",
+        "id": 8,
+        "category_name": "Спорт"
+    },
+    "9": {
+        "title": "pic3",
+        "text": "lkjk",
+        "category_id": "1",
+        "id": 9,
+        "image": "\/storage\/default.jpg",
+        "category_name": "Спорт"
+    },
+    "10": {
+        "title": "новость х",
+        "text": "траляля",
+        "category_id": "2",
+        "image": "\/storage\/VlPt10IdgLgLZZhaANnQVtyh6p1hN9JP8aVDhT81.jpg",
+        "id": 10,
+        "category_name": "Политика"
     }
 }
