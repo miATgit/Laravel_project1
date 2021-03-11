@@ -36,12 +36,12 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav col-sm-10 me-auto">
                         @include('includes.menu')
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav col-sm-2">
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -83,7 +83,8 @@
         @if (session('success'))
         <div class="container">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{session('success')}}
+                @flash(['message' => session('success')])
+                {{session()->forget('success')}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>

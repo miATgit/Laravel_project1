@@ -26,7 +26,7 @@ Route::get('/news/category/{slug}', [\App\Http\Controllers\CategoryController::c
 Route::match(['get', 'post'],'/admin/news/create', [\App\Http\Controllers\Admin\NewsController::class,'create'])->name('news.create');
 Route::get('/admin/news/{id}/edit', [\App\Http\Controllers\Admin\NewsController::class,'edit'])-> where('id', '\d+')->name('news.edit');
 
-
+Route::get('/search', [\App\Http\Controllers\NewsController::class,'search'])->name('news.search');
 
 
 Auth::routes();

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class News
 {
 
-    private static $news = [
+    private static $news1 = [
 
         1 => [
             'id' => 1,
@@ -40,15 +41,21 @@ class News
         ]
     ];
 
+    public static function getNewsAll() {
+        $news = DB::table('news');
+        return $news;
+
+    }
+
     public static function getNews() {
-        return json_decode(\File::get(storage_path().'/news.json'), true);
+        $news = DB::table('news')->paginate(5);
+        return $news;
+
     }
 
     public static function getNewsId($id) {
-        if (array_key_exists($id, static::getNews())) {
-            return static::getNews()[$id];
-        }
-        else return [];
+       return static::getNewsAll()->find($id);
+
     }
 
     public static function getNewsCategory($category_id) {
